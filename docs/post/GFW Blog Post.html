@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="![Banner](https://files.catbox.moe/n1u6by.png)
+
+
+In this blog post, we are going to talk about how the GFW (Great Firewall) functions, common tools to bypass it, and explain how China's international internet functions.
+
+### How does the GFW function?
+
+We don't know fully how GFW works but there are research articles from China on how to build GFW. We can make some educated guesses based on the projects around us. The GFW works by doing DPI (deep packet inspection)—that’s how most government censorship firewalls work. It inspects your internet packets looking for blocked sites, prohibited content, etc. Then it responds back with either a server reset error or a DNS poisoning attack.
+
+Research Articles (I am forced to put these articles on the blog.)
+
+Article 1: [Link](https://github.com/net4people/bbs/issues/435)
+
+Article 2: [Link](https://github.com/net4people/bbs/issues/437)
+
+Article 3: [Link](https://github.com/net4people/bbs/issues/434)
+
+### How does the GFW detect VPNs?
+
+DPI can look for common patterns caused by common VPN protocols like OpenVPN or WireGuard. They have distinct patterns and use unique ports in their traffic. OpenVPN or WireGuard are most likely long-lived connections—in human terms, these connections are being created and used indefinitely. The GFW will get suspicious of that.
+
+### How does the GFW detect common proxy protocols?
+
+There are many detected attempts of active probing done by the GFW, where it sends a request to the server, and if the server responds like a typical proxy server (e.g., asking for auth, etc.), it will get blocked. The GFW can also look for TLS client and server TLS fingerprints—if they match, you are getting blocked.
+
+### Do ShadowSocks work in these times?
+
+ShadowSocks is essentially an encrypted version of SOCKS that can kind of be disguised as HTTPS traffic—not fully, and we'll get to that in a moment. Due to some exploits, and since late 2021, the GFW uses real-time heuristic-based methods analyzing encrypted traffic fingerprints (e.g., byte patterns, ASCII ratios) to block ShadowSocks with low false positives. More details here: [Link](https://gfw.report/publications/usenixsecurity23/en/). The GFW also targets cloud providers more than normal IP addresses. It’s more common that VPNs and proxies are blocked during sensitive times, normally around June. Also, I need to mention that ShadowSocks's author has been arrested by the Chinese authorities and has been 'drinking tea' since then (if you don’t get that, it’s fine). That might be a rumor but the project has been taken down due to authority issues, he/she said that him self not me.
+
+### More recent protocols to bypass the GFW
+
+If you need an installation guide, please consult my censorship bypass guide [here](https://2305878273.7844380499.cfd/).
+
+#### NaiveProxy
+
+The newest one and has the lowest detection because it uses normal HTTPS/2 traffic and the Chromium browser stack, which makes the TLS client server fingerprint look like Chrome’s. The downside is the clients—there is no client on iOS (at least any I trust), so you have to proxy through your desktop or use Android.
+
+#### VMESS
+
+Part of the V2Ray suite. It's an older protocol developed by the V2Ray Project. It supports custom encryption and can be used basically anywhere (iOS, etc.). The downside is that it’s easier to detect and has slower speed due to encryption overhead.
+
+#### VLESS
+
+Part of the V2Ray suite but developed by V2Fly. It **doesn't** have built-in encryption, but it relies on TLS, which is harder to detect. You can also pair VLESS with Reality and XTLS. It’s more lightweight and supports pretty much every single client. It’s also faster than VMESS due to being lightweight.
+
+#### Trojan
+
+Mimics HTTPS traffic. Not really maintained anymore. No new updates is being pushed through Github. Pretty much dead—VLESS is better anyway. Or use NaiveProxy.
+
+#### Hysteria 2
+
+Hysteria 2 is a proxy protocol designed for speed. It uses UDP and QUIC instead of slower TCP. It can also force sending multiple packets when the network is congested. It’s better for gaming and low-latency applications, but the downside is that it can be blocked in places like schools where only TCP is allowed.
+
+### What are some ways to connect to these proxy servers?
+
+![Connecting to the proxy server](https://files.catbox.moe/8nohs6.png)
+
+Let me walk you through each method one by one.
+
+### Direct connection
+
+Pretty easy to understand—it uses NaiveProxy or V2Ray suite to connect to the proxy server directly. The upside is that it is very simple to run and is the cheapest to run. The downside is that it can be very, very slow during high peak hours like 10 p.m. in China, and it can be very easily blocked if they detect it's a proxy server.
+
+#### IPLC Forwarding
+
+First, we need to understand what IPLC is. IPLC stands for International Private Leased Circuit. Instead of sharing the same international output where network congestion happens, you have a dedicated cable to route your traffic through. Put simply, it’s like having your own lane on the highway, and it’s only reserved for you. Because it’s private, it has no GFW and can’t be blocked unless the owner gets arrested or something happens. It’s like a local connection on your home router—when the network is very slow because of congestion, your local network is still blazing fast when doing network transfers between local devices.
+
+#### Normal Forwarding
+
+Having an inbound server in China means a more stable connection for the customer. Let’s say you run an airport (proxy server company). You don’t have to make the customer change servers every time it gets blocked—you can do this on your end. It also means the customer or you can use ShadowSocks, and it might be more widely compatible. Unless the inbound server uses a custom international output that still has the GFW but is custom for you, like CN GIA2 (Global Internet Access). During peak hours, the speed is still going to be low. Also, it’s more expensive to run and risky due to having a server in China.
+
+> Grammar and spelling fixed by AI but the text is written by Zenith.
+。">
+<meta property="og:title" content="GFW Blog Post">
+<meta property="og:description" content="![Banner](https://files.catbox.moe/n1u6by.png)
+
+
+In this blog post, we are going to talk about how the GFW (Great Firewall) functions, common tools to bypass it, and explain how China's international internet functions.
+
+### How does the GFW function?
+
+We don't know fully how GFW works but there are research articles from China on how to build GFW. We can make some educated guesses based on the projects around us. The GFW works by doing DPI (deep packet inspection)—that’s how most government censorship firewalls work. It inspects your internet packets looking for blocked sites, prohibited content, etc. Then it responds back with either a server reset error or a DNS poisoning attack.
+
+Research Articles (I am forced to put these articles on the blog.)
+
+Article 1: [Link](https://github.com/net4people/bbs/issues/435)
+
+Article 2: [Link](https://github.com/net4people/bbs/issues/437)
+
+Article 3: [Link](https://github.com/net4people/bbs/issues/434)
+
+### How does the GFW detect VPNs?
+
+DPI can look for common patterns caused by common VPN protocols like OpenVPN or WireGuard. They have distinct patterns and use unique ports in their traffic. OpenVPN or WireGuard are most likely long-lived connections—in human terms, these connections are being created and used indefinitely. The GFW will get suspicious of that.
+
+### How does the GFW detect common proxy protocols?
+
+There are many detected attempts of active probing done by the GFW, where it sends a request to the server, and if the server responds like a typical proxy server (e.g., asking for auth, etc.), it will get blocked. The GFW can also look for TLS client and server TLS fingerprints—if they match, you are getting blocked.
+
+### Do ShadowSocks work in these times?
+
+ShadowSocks is essentially an encrypted version of SOCKS that can kind of be disguised as HTTPS traffic—not fully, and we'll get to that in a moment. Due to some exploits, and since late 2021, the GFW uses real-time heuristic-based methods analyzing encrypted traffic fingerprints (e.g., byte patterns, ASCII ratios) to block ShadowSocks with low false positives. More details here: [Link](https://gfw.report/publications/usenixsecurity23/en/). The GFW also targets cloud providers more than normal IP addresses. It’s more common that VPNs and proxies are blocked during sensitive times, normally around June. Also, I need to mention that ShadowSocks's author has been arrested by the Chinese authorities and has been 'drinking tea' since then (if you don’t get that, it’s fine). That might be a rumor but the project has been taken down due to authority issues, he/she said that him self not me.
+
+### More recent protocols to bypass the GFW
+
+If you need an installation guide, please consult my censorship bypass guide [here](https://2305878273.7844380499.cfd/).
+
+#### NaiveProxy
+
+The newest one and has the lowest detection because it uses normal HTTPS/2 traffic and the Chromium browser stack, which makes the TLS client server fingerprint look like Chrome’s. The downside is the clients—there is no client on iOS (at least any I trust), so you have to proxy through your desktop or use Android.
+
+#### VMESS
+
+Part of the V2Ray suite. It's an older protocol developed by the V2Ray Project. It supports custom encryption and can be used basically anywhere (iOS, etc.). The downside is that it’s easier to detect and has slower speed due to encryption overhead.
+
+#### VLESS
+
+Part of the V2Ray suite but developed by V2Fly. It **doesn't** have built-in encryption, but it relies on TLS, which is harder to detect. You can also pair VLESS with Reality and XTLS. It’s more lightweight and supports pretty much every single client. It’s also faster than VMESS due to being lightweight.
+
+#### Trojan
+
+Mimics HTTPS traffic. Not really maintained anymore. No new updates is being pushed through Github. Pretty much dead—VLESS is better anyway. Or use NaiveProxy.
+
+#### Hysteria 2
+
+Hysteria 2 is a proxy protocol designed for speed. It uses UDP and QUIC instead of slower TCP. It can also force sending multiple packets when the network is congested. It’s better for gaming and low-latency applications, but the downside is that it can be blocked in places like schools where only TCP is allowed.
+
+### What are some ways to connect to these proxy servers?
+
+![Connecting to the proxy server](https://files.catbox.moe/8nohs6.png)
+
+Let me walk you through each method one by one.
+
+### Direct connection
+
+Pretty easy to understand—it uses NaiveProxy or V2Ray suite to connect to the proxy server directly. The upside is that it is very simple to run and is the cheapest to run. The downside is that it can be very, very slow during high peak hours like 10 p.m. in China, and it can be very easily blocked if they detect it's a proxy server.
+
+#### IPLC Forwarding
+
+First, we need to understand what IPLC is. IPLC stands for International Private Leased Circuit. Instead of sharing the same international output where network congestion happens, you have a dedicated cable to route your traffic through. Put simply, it’s like having your own lane on the highway, and it’s only reserved for you. Because it’s private, it has no GFW and can’t be blocked unless the owner gets arrested or something happens. It’s like a local connection on your home router—when the network is very slow because of congestion, your local network is still blazing fast when doing network transfers between local devices.
+
+#### Normal Forwarding
+
+Having an inbound server in China means a more stable connection for the customer. Let’s say you run an airport (proxy server company). You don’t have to make the customer change servers every time it gets blocked—you can do this on your end. It also means the customer or you can use ShadowSocks, and it might be more widely compatible. Unless the inbound server uses a custom international output that still has the GFW but is custom for you, like CN GIA2 (Global Internet Access). During peak hours, the speed is still going to be low. Also, it’s more expensive to run and risky due to having a server in China.
+
+> Grammar and spelling fixed by AI but the text is written by Zenith.
+。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://eli32-vlc.github.io/gmeek-zenith.github.io/post/GFW%20Blog%20Post.html">
+<meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
+<title>GFW Blog Post</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">GFW Blog Post</h1>
+<div class="title-right">
+    <a href="https://eli32-vlc.github.io/gmeek-zenith.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/eli32-vlc/gmeek-zenith.github.io/issues/1" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/d20af7b361fb1e21229ec4965c87ff7e2b0cf3921d8f8ac7782d284ab6324dea/68747470733a2f2f66696c65732e636174626f782e6d6f652f6e31753662792e706e67"><img src="https://camo.githubusercontent.com/d20af7b361fb1e21229ec4965c87ff7e2b0cf3921d8f8ac7782d284ab6324dea/68747470733a2f2f66696c65732e636174626f782e6d6f652f6e31753662792e706e67" alt="Banner" data-canonical-src="https://files.catbox.moe/n1u6by.png" style="max-width: 100%;"></a></p>
+<p>In this blog post, we are going to talk about how the GFW (Great Firewall) functions, common tools to bypass it, and explain how China's international internet functions.</p>
+<h3>How does the GFW function?</h3>
+<p>We don't know fully how GFW works but there are research articles from China on how to build GFW. We can make some educated guesses based on the projects around us. The GFW works by doing DPI (deep packet inspection)—that’s how most government censorship firewalls work. It inspects your internet packets looking for blocked sites, prohibited content, etc. Then it responds back with either a server reset error or a DNS poisoning attack.</p>
+<p>Research Articles (I am forced to put these articles on the blog.)</p>
+<p>Article 1: <a href="https://github.com/net4people/bbs/issues/435" data-hovercard-type="issue" data-hovercard-url="/net4people/bbs/issues/435/hovercard">Link</a></p>
+<p>Article 2: <a href="https://github.com/net4people/bbs/issues/437" data-hovercard-type="issue" data-hovercard-url="/net4people/bbs/issues/437/hovercard">Link</a></p>
+<p>Article 3: <a href="https://github.com/net4people/bbs/issues/434" data-hovercard-type="issue" data-hovercard-url="/net4people/bbs/issues/434/hovercard">Link</a></p>
+<h3>How does the GFW detect VPNs?</h3>
+<p>DPI can look for common patterns caused by common VPN protocols like OpenVPN or WireGuard. They have distinct patterns and use unique ports in their traffic. OpenVPN or WireGuard are most likely long-lived connections—in human terms, these connections are being created and used indefinitely. The GFW will get suspicious of that.</p>
+<h3>How does the GFW detect common proxy protocols?</h3>
+<p>There are many detected attempts of active probing done by the GFW, where it sends a request to the server, and if the server responds like a typical proxy server (e.g., asking for auth, etc.), it will get blocked. The GFW can also look for TLS client and server TLS fingerprints—if they match, you are getting blocked.</p>
+<h3>Do ShadowSocks work in these times?</h3>
+<p>ShadowSocks is essentially an encrypted version of SOCKS that can kind of be disguised as HTTPS traffic—not fully, and we'll get to that in a moment. Due to some exploits, and since late 2021, the GFW uses real-time heuristic-based methods analyzing encrypted traffic fingerprints (e.g., byte patterns, ASCII ratios) to block ShadowSocks with low false positives. More details here: <a href="https://gfw.report/publications/usenixsecurity23/en/" rel="nofollow">Link</a>. The GFW also targets cloud providers more than normal IP addresses. It’s more common that VPNs and proxies are blocked during sensitive times, normally around June. Also, I need to mention that ShadowSocks's author has been arrested by the Chinese authorities and has been "drinking tea" since then (if you don’t get that, it’s fine). That might be a rumor but the project has been taken down due to authority issues, he/she said that him self not me.</p>
+<h3>More recent protocols to bypass the GFW</h3>
+<p>If you need an installation guide, please consult my censorship bypass guide <a href="https://2305878273.7844380499.cfd/" rel="nofollow">here</a>.</p>
+<h4>NaiveProxy</h4>
+<p>The newest one and has the lowest detection because it uses normal HTTPS/2 traffic and the Chromium browser stack, which makes the TLS client server fingerprint look like Chrome’s. The downside is the clients—there is no client on iOS (at least any I trust), so you have to proxy through your desktop or use Android.</p>
+<h4>VMESS</h4>
+<p>Part of the V2Ray suite. It's an older protocol developed by the V2Ray Project. It supports custom encryption and can be used basically anywhere (iOS, etc.). The downside is that it’s easier to detect and has slower speed due to encryption overhead.</p>
+<h4>VLESS</h4>
+<p>Part of the V2Ray suite but developed by V2Fly. It <strong>doesn't</strong> have built-in encryption, but it relies on TLS, which is harder to detect. You can also pair VLESS with Reality and XTLS. It’s more lightweight and supports pretty much every single client. It’s also faster than VMESS due to being lightweight.</p>
+<h4>Trojan</h4>
+<p>Mimics HTTPS traffic. Not really maintained anymore. No new updates is being pushed through Github. Pretty much dead—VLESS is better anyway. Or use NaiveProxy.</p>
+<h4>Hysteria 2</h4>
+<p>Hysteria 2 is a proxy protocol designed for speed. It uses UDP and QUIC instead of slower TCP. It can also force sending multiple packets when the network is congested. It’s better for gaming and low-latency applications, but the downside is that it can be blocked in places like schools where only TCP is allowed.</p>
+<h3>What are some ways to connect to these proxy servers?</h3>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/bfd76882320def7b15d338190a24e5be93de00fcd6b3ef776ec57ff3adcd0d2f/68747470733a2f2f66696c65732e636174626f782e6d6f652f386e6f6873362e706e67"><img src="https://camo.githubusercontent.com/bfd76882320def7b15d338190a24e5be93de00fcd6b3ef776ec57ff3adcd0d2f/68747470733a2f2f66696c65732e636174626f782e6d6f652f386e6f6873362e706e67" alt="Connecting to the proxy server" data-canonical-src="https://files.catbox.moe/8nohs6.png" style="max-width: 100%;"></a></p>
+<p>Let me walk you through each method one by one.</p>
+<h3>Direct connection</h3>
+<p>Pretty easy to understand—it uses NaiveProxy or V2Ray suite to connect to the proxy server directly. The upside is that it is very simple to run and is the cheapest to run. The downside is that it can be very, very slow during high peak hours like 10 p.m. in China, and it can be very easily blocked if they detect it's a proxy server.</p>
+<h4>IPLC Forwarding</h4>
+<p>First, we need to understand what IPLC is. IPLC stands for International Private Leased Circuit. Instead of sharing the same international output where network congestion happens, you have a dedicated cable to route your traffic through. Put simply, it’s like having your own lane on the highway, and it’s only reserved for you. Because it’s private, it has no GFW and can’t be blocked unless the owner gets arrested or something happens. It’s like a local connection on your home router—when the network is very slow because of congestion, your local network is still blazing fast when doing network transfers between local devices.</p>
+<h4>Normal Forwarding</h4>
+<p>Having an inbound server in China means a more stable connection for the customer. Let’s say you run an airport (proxy server company). You don’t have to make the customer change servers every time it gets blocked—you can do this on your end. It also means the customer or you can use ShadowSocks, and it might be more widely compatible. Unless the inbound server uses a custom international output that still has the GFW but is custom for you, like CN GIA2 (Global Internet Access). During peak hours, the speed is still going to be low. Also, it’s more expensive to run and risky due to having a server in China.</p>
+<blockquote>
+<p>Grammar and spelling fixed by AI but the text is written by Zenith.</p>
+</blockquote></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://eli32-vlc.github.io/gmeek-zenith.github.io">Zeniths Blog</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","eli32-vlc/gmeek-zenith.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+
+
+</html>

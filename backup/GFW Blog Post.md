@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Zeniths Blog</title><link>https://eli32-vlc.github.io/gmeek-zenith.github.io</link><description>My blog around tech.</description><copyright>Zeniths Blog</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://github.githubassets.com/favicons/favicon.svg</url><title>avatar</title><link>https://eli32-vlc.github.io/gmeek-zenith.github.io</link></image><lastBuildDate>Sun, 15 Jun 2025 12:31:36 +0000</lastBuildDate><managingEditor>Zeniths Blog</managingEditor><ttl>60</ttl><webMaster>Zeniths Blog</webMaster><item><title>GFW Blog Post</title><link>https://eli32-vlc.github.io/gmeek-zenith.github.io/post/GFW%20Blog%20Post.html</link><description>![Banner](https://files.catbox.moe/n1u6by.png)
+![Banner](https://files.catbox.moe/n1u6by.png)
 
 
 In this blog post, we are going to talk about how the GFW (Great Firewall) functions, common tools to bypass it, and explain how China's international internet functions.
@@ -26,7 +25,7 @@ There are many detected attempts of active probing done by the GFW, where it sen
 
 ### Do ShadowSocks work in these times?
 
-ShadowSocks is essentially an encrypted version of SOCKS that can kind of be disguised as HTTPS traffic—not fully, and we'll get to that in a moment. Due to some exploits, and since late 2021, the GFW uses real-time heuristic-based methods analyzing encrypted traffic fingerprints (e.g., byte patterns, ASCII ratios) to block ShadowSocks with low false positives. More details here: [Link](https://gfw.report/publications/usenixsecurity23/en/). The GFW also targets cloud providers more than normal IP addresses. It’s more common that VPNs and proxies are blocked during sensitive times, normally around June. Also, I need to mention that ShadowSocks's author has been arrested by the Chinese authorities and has been 'drinking tea' since then (if you don’t get that, it’s fine). That might be a rumor but the project has been taken down due to authority issues, he/she said that him self not me.
+ShadowSocks is essentially an encrypted version of SOCKS that can kind of be disguised as HTTPS traffic—not fully, and we'll get to that in a moment. Due to some exploits, and since late 2021, the GFW uses real-time heuristic-based methods analyzing encrypted traffic fingerprints (e.g., byte patterns, ASCII ratios) to block ShadowSocks with low false positives. More details here: [Link](https://gfw.report/publications/usenixsecurity23/en/). The GFW also targets cloud providers more than normal IP addresses. It’s more common that VPNs and proxies are blocked during sensitive times, normally around June. Also, I need to mention that ShadowSocks's author has been arrested by the Chinese authorities and has been "drinking tea" since then (if you don’t get that, it’s fine). That might be a rumor but the project has been taken down due to authority issues, he/she said that him self not me.
 
 ### More recent protocols to bypass the GFW
 
@@ -70,5 +69,4 @@ First, we need to understand what IPLC is. IPLC stands for International Private
 
 Having an inbound server in China means a more stable connection for the customer. Let’s say you run an airport (proxy server company). You don’t have to make the customer change servers every time it gets blocked—you can do this on your end. It also means the customer or you can use ShadowSocks, and it might be more widely compatible. Unless the inbound server uses a custom international output that still has the GFW but is custom for you, like CN GIA2 (Global Internet Access). During peak hours, the speed is still going to be low. Also, it’s more expensive to run and risky due to having a server in China.
 
-&gt; Grammar and spelling fixed by AI but the text is written by Zenith.
-。</description><guid isPermaLink="true">https://eli32-vlc.github.io/gmeek-zenith.github.io/post/GFW%20Blog%20Post.html</guid><pubDate>Sun, 15 Jun 2025 12:31:08 +0000</pubDate></item></channel></rss>
+> Grammar and spelling fixed by AI but the text is written by Zenith.
